@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
+import { useRecoilState } from 'recoil';
+import { toDoState } from '../atoms';
 
 const Card = styled.div<{ isDragging: boolean }>`
   border-radius: 5px;
@@ -17,9 +19,10 @@ interface IDragabbleCardProps {
 }
 
 function DragabbleCard({ toDoId, toDoText, index }: IDragabbleCardProps) {
+  const [toDos, setToDos] = useRecoilState(toDoState);
   return (
     <Draggable key={toDoId} draggableId={toDoId + ""} index={index}>
-      {(magic, snapshot) => (
+      {(magic, snapshot, info) => (
         <Card
           isDragging={snapshot.isDragging}
           ref={magic.innerRef}
@@ -27,7 +30,17 @@ function DragabbleCard({ toDoId, toDoText, index }: IDragabbleCardProps) {
           {...magic.draggableProps}
         >
           {toDoText}
-          <button type='button'>삭제</button>
+          <button type='button' onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+            const { source } = info;
+            setToDos((allBoards) => {
+              const soouceBoard = [...allBoards[source.droppableId]];
+              soouceBoard.splice(source.index, 1);
+              return {
+                ...allBoards,
+                [source.droppableId]: soouceBoard,
+              };
+            })
+          }}>삭제</button>
         </Card>
       )}
     </Draggable>
