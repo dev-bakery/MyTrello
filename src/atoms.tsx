@@ -20,3 +20,8 @@ export const toDoState = atom<IToDoState>({
   },
   effects_UNSTABLE: [persistAtom],
 })
+
+export const isLightAtom = atom({
+  key: 'isLight',
+  default: true,
+})

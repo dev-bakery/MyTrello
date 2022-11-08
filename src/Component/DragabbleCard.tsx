@@ -20,6 +20,7 @@ interface IDragabbleCardProps {
 
 function DragabbleCard({ toDoId, toDoText, index }: IDragabbleCardProps) {
   const [toDos, setToDos] = useRecoilState(toDoState);
+  console.log(toDos)
   return (
     <Draggable key={toDoId} draggableId={toDoId + ""} index={index}>
       {(magic, snapshot, info) => (
